@@ -9,7 +9,7 @@ import openpyxl
 
 
 wb = openpyxl.Workbook()
-ws = wb.create_sheet('2f')  # 新建表格名称
+ws = wb.create_sheet('2f')
 ws.cell(row=1, column=1).value = "mse"
 ws.cell(row=1, column=2).value = "psnr"
 ws.cell(row=1, column=3).value = "npcc"
@@ -17,22 +17,22 @@ ws.cell(row=1, column=4).value = "ssim"
 
 Tensor = transforms.Compose([transforms.Resize((256, 256)), transforms.ToTensor()])
 RDR_model = RDR_model()
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")  # 定义训练的设备
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")  
 RDR_model.to(device)
-RDR_model.load_state_dict(torch.load('./parameter/mse_gr36_f'))  # 加载权重
-print("模型加载完成")
+RDR_model.load_state_dict(torch.load('./parameter/mse_gr36_f'))  
+print("model ready")
 img_path = 'D:/1'
 lb_path = 'D:/2'
 
 imglist = os.listdir(img_path)
-imglist.sort(key=lambda x: int(x[:-4]))  # 倒着数第四位'.'为分界线，按照‘.'左边的数字从小到大排序
+imglist.sort(key=lambda x: int(x[:-4]))
 s = 1
 for i in imglist:
     image_path = os.path.join(img_path, i)
     label_path = os.path.join(lb_path, i)
     image = Image.open(image_path)
     image = Tensor(image)
-    image = torch.reshape(image, (1, 1, 256, 256))  # 增加batch维度
+    image = torch.reshape(image, (1, 1, 256, 256))
     label = Image.open(label_path)
     label = Tensor(label)
     label = torch.reshape(label, (1, 1, 256, 256))
