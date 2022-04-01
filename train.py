@@ -12,42 +12,42 @@ from unit import to_psnr, to_ssim_skimage, to_ssim, to_mseloss, to_pearson
 from NPCC import NPCC_loss, ssim_loss, mse_loss
 
 
-# 创建表格
+
 wb = openpyxl.Workbook()
-ws = wb.create_sheet('epoch_d=f')  # 新建表格名称
-# 加载数据
-# imagenet数据集
+ws = wb.create_sheet('epoch_d=f')
+# Load data
+# imagenet data
 train_root_dir = 'D:/train/d=f/input_data/imagenet'
 train_label_dir = 'D:/train/d=f/groundtruth_data/imagenet'
 train_loader = DataLoader(train_data(train_root_dir, train_label_dir), batch_size=10, shuffle=True)
-# voc验证集
+# voc data
 voc_val_root_dir = 'D:/val/d=f/input_data/voc'
 voc_val_label_dir = 'D:/val/d=f/groundtruth_data/voc'
 voc_val_loader = DataLoader(val_data(voc_val_root_dir, voc_val_label_dir), batch_size=25)
-# coco验证集
+# coco data
 coco_val_root_dir = 'D:/val/d=f/input_data/coco'
 coco_val_label_dir = 'D:/val/d=f/groundtruth_data/coco'
 coco_val_loader = DataLoader(val_data(coco_val_root_dir, coco_val_label_dir), batch_size=25)
-# lfw验证集
+# lfw data
 lfw_val_root_dir = 'D:/val/d=f/input_data/lfw'
 lfw_val_label_dir = 'D:/val/d=f/groundtruth_data/lfw'
 lfw_val_loader = DataLoader(val_data(lfw_val_root_dir, lfw_val_label_dir), batch_size=25)
-# celeb验证集
+# celeb data
 celeb_val_root_dir = 'D:/val/d=f/input_data/celeb'
 celeb_val_label_dir = 'D:/val/d=f/groundtruth_data/celeb'
 celeb_val_loader = DataLoader(val_data(celeb_val_root_dir, celeb_val_label_dir), batch_size=25)
-# celeb验证集
+# celeb data
 img_val_root_dir = 'D:/val/d=f/input_data/imagenet'
 img_val_label_dir = 'D:/val/d=f/groundtruth_data/imagenet'
 img_val_loader = DataLoader(val_data(img_val_root_dir, img_val_label_dir), batch_size=25)
 
-# 加载模型
-RDR_model = RDR_model()
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")  # 定义训练的设备
-RDR_model.to(device)
-print("模型加载完成，开始训练")
 
-# 损失函数
+RDR_model = RDR_model()
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+RDR_model.to(device)
+print("model ready")
+
+
 
 loss_function = nn.MSELoss()
 loss_function3 = NPCC_loss()
@@ -65,14 +65,14 @@ learning_rate = 0.002
 
 optimizer = torch.optim.Adam(RDR_model.parameters(), lr=learning_rate)
 
-# 加载权重
+# Load parameter
 # try:
 #     RDR_model.load_state_dict(torch.load('mse_gr36_1.5f'))
 #     print('--- weight loaded ---')
 # except:
 #     print('--- no weight loaded ---')
 
-total_epoch = 120
+total_epoch = 100
 old_psnr = 0.0
 old_ssim = 0.0
 accumulation_steps = 4
@@ -84,8 +84,7 @@ for i in range(total_epoch):
     start_time = time.time()
     if ((i + 1) % 10) == 0:
         learning_rate /= 2
-    # 后期加入学习率调整
-    # 训练
+        
     # empty_cache()
     RDR_model.train()
     psnr_list = []
@@ -96,17 +95,17 @@ for i in range(total_epoch):
         imgs, label = train_data
         imgs = imgs.to(device)
         label = label.to(device)
-        output = RDR_model(imgs)  # 计算输出
+        output = RDR_model(imgs)  
         # output = torch.where(output < 1, output, b)
 
-        loss = loss_function(output, label)  # 计算损失函数
+        loss = loss_function(output, label)  
         # loss = loss_function1(output, label) + loss_function3(output, label)
         # print(loss)
         # optimizer.zero_grad()
         loss /= accumulation_steps
         loss.backward()
         # optimizer.step()
-        if ((batch_id + 1) % accumulation_steps) == 0:  # 梯度叠加
+        if ((batch_id + 1) % accumulation_steps) == 0: 
             optimizer.step()
             optimizer.zero_grad()
 
@@ -135,7 +134,7 @@ for i in range(total_epoch):
     ws.cell(row=s, column=4).value = train_ssim.item()
 
     RDR_model.eval()
-    # 验证voc数据集
+    # voc data result
     voc_psnr_list_ = []
     voc_ssim_list_ = []
     voc_mse_list_ = []
@@ -171,7 +170,7 @@ for i in range(total_epoch):
     ws.cell(row=s, column=7).value = voc_val_npcc.item()
     ws.cell(row=s, column=8).value = voc_val_ssim.item()
 
-    # 验证coco数据集
+    # coco data result
     coco_psnr_list_ = []
     coco_ssim_list_ = []
     coco_mse_list_ = []
@@ -206,7 +205,7 @@ for i in range(total_epoch):
     ws.cell(row=s, column=11).value = coco_val_npcc.item()
     ws.cell(row=s, column=12).value = coco_val_ssim.item()
 
-    # 验证lfw数据集
+    # lfw data result
     lfw_psnr_list_ = []
     lfw_ssim_list_ = []
     lfw_mse_list_ = []
@@ -241,7 +240,7 @@ for i in range(total_epoch):
     ws.cell(row=s, column=15).value = lfw_val_npcc.item()
     ws.cell(row=s, column=16).value = lfw_val_ssim.item()
 
-    # 验证celeb数据集
+    # celeb data result
     celeb_psnr_list_ = []
     celeb_ssim_list_ = []
     celeb_mse_list_ = []
@@ -276,7 +275,7 @@ for i in range(total_epoch):
     ws.cell(row=s, column=19).value = celeb_val_npcc.item()
     ws.cell(row=s, column=20).value = celeb_val_ssim.item()
 
-    # 验证imagenet数据集
+    # imagenet data result
     img_psnr_list_ = []
     img_ssim_list_ = []
     img_mse_list_ = []
@@ -317,7 +316,7 @@ for i in range(total_epoch):
         torch.save(RDR_model.state_dict(), 'mse_gr36_f')
         old_psnr = img_val_psnr
         # old_ssim = val_ssim/'''''''''“
-        print("权重更新完成")
+        print("update parameters")
     # if i == 100:
     #     torch.save(RDR_model.state_dict(), 'weight_parameter_gr36{}'.format(i))
 
@@ -325,7 +324,7 @@ for i in range(total_epoch):
     print("one epoch time:{}".format(one_epoch_time))
 
 '''
-L2正则化，剔除bias and bn
+bias and bn
 weight_decay_list = (param for name, param in model.named_parameters() if name[-4:] != 'bias' and "bn" not in name)
 no_decay_list = (param for name, param in model.named_parameters() if name[-4:] == 'bias' or "bn" in name)
 parameters = [{'params': weight_decay_list},
