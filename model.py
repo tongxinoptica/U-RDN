@@ -32,7 +32,7 @@ class RDR_model(nn.Module):
                                    growth_rate=growth_rate)
         # self.RDDB6 = RD_Down_layer(in_channels=out_channel * 32, num_dense_layer=num_dense_layer,
         #                            growth_rate=growth_rate)
-        # self.RDDB7 = RD_Down_layer(in_channels=out_channel * 64, num_dense_layer=num_dense_layer,  模型简化
+        # self.RDDB7 = RD_Down_layer(in_channels=out_channel * 64, num_dense_layer=num_dense_layer,  
         #                            growth_rate=growth_rate)
         self.RDUB1 = RD_Up_layer(in_channels=in_feature[0], out_channels=out_feature[0],
                                  num_dense_layer=num_dense_layer, growth_rate=growth_rate)
