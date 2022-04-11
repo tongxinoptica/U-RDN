@@ -20,7 +20,7 @@ img = torch.reshape(img, (1, 1, 256, 256))
 label = Image.open(label_path)
 label = Tensor(label)
 label = torch.reshape(label, (1, 1, 256, 256)) 
-RDR_model.load_state_dict(torch.load('./parameter/mse_gr36_1.5f')) # Select the correct parameter file
+RDR_model.load_state_dict(torch.load('./parameter/mse_gr36_f')) # Select the correct parameter file
 b = torch.ones(256, 256).to(device)
 
 RDR_model.eval()
