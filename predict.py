@@ -12,15 +12,15 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 RDR_model.to(device)
 print("model ready")
 
-Image_path = 'D:/picture/robustness/translation/1.5f-80.jpg'
-label_path = 'D:/picture/robustness/gt.jpg'
+Image_path = './images_predict/f/in_celeb.jpg'  # You can select other images, but they should match the parameter files
+label_path = './images_predict/gt_celeb.jpg'
 img = Image.open(Image_path)
 img = Tensor(img)
 img = torch.reshape(img, (1, 1, 256, 256))
 label = Image.open(label_path)
 label = Tensor(label)
 label = torch.reshape(label, (1, 1, 256, 256)) 
-RDR_model.load_state_dict(torch.load('./parameter/mse_gr36_1.5f'))
+RDR_model.load_state_dict(torch.load('./parameter/mse_gr36_1.5f')) # Select the correct parameter file
 b = torch.ones(256, 256).to(device)
 
 RDR_model.eval()
@@ -45,5 +45,5 @@ with torch.no_grad():
     output_pil = to_pil(output[0])  
     plt.imshow(output_pil, cmap='gray')
     plt.axis('off')
-    plt.savefig('D:/out1.5f-80.jpg', bbox_inches='tight', pad_inches=0)
+    # plt.savefig('./out_f_celeb.jpg', bbox_inches='tight', pad_inches=0) # Save output
     plt.show()
