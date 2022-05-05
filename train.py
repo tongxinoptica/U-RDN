@@ -17,28 +17,28 @@ wb = openpyxl.Workbook()
 ws = wb.create_sheet('epoch_d=f')
 # Load data
 # imagenet data
-train_root_dir = 'D:/train/d=f/input_data/imagenet'
-train_label_dir = 'D:/train/d=f/groundtruth_data/imagenet'
-train_loader = DataLoader(train_data(train_root_dir, train_label_dir), batch_size=10, shuffle=True)
+train_root_dir = './data/train/d=f/input_data/imagenet'
+train_label_dir = './data/train/d=f/groundtruth_data/imagenet'
+train_loader = DataLoader(train_data(train_root_dir, train_label_dir), batch_size=16, shuffle=True)
 # voc data
-voc_val_root_dir = 'D:/val/d=f/input_data/voc'
-voc_val_label_dir = 'D:/val/d=f/groundtruth_data/voc'
+voc_val_root_dir = './data/val/d=f/input_data/voc'
+voc_val_label_dir = './data/val/d=f/groundtruth_data/voc'
 voc_val_loader = DataLoader(val_data(voc_val_root_dir, voc_val_label_dir), batch_size=25)
 # coco data
-coco_val_root_dir = 'D:/val/d=f/input_data/coco'
-coco_val_label_dir = 'D:/val/d=f/groundtruth_data/coco'
+coco_val_root_dir = './data:/val/d=f/input_data/coco'
+coco_val_label_dir = './data/val/d=f/groundtruth_data/coco'
 coco_val_loader = DataLoader(val_data(coco_val_root_dir, coco_val_label_dir), batch_size=25)
 # lfw data
-lfw_val_root_dir = 'D:/val/d=f/input_data/lfw'
-lfw_val_label_dir = 'D:/val/d=f/groundtruth_data/lfw'
+lfw_val_root_dir = './data/val/d=f/input_data/lfw'
+lfw_val_label_dir = './data/val/d=f/groundtruth_data/lfw'
 lfw_val_loader = DataLoader(val_data(lfw_val_root_dir, lfw_val_label_dir), batch_size=25)
 # celeb data
-celeb_val_root_dir = 'D:/val/d=f/input_data/celeb'
-celeb_val_label_dir = 'D:/val/d=f/groundtruth_data/celeb'
+celeb_val_root_dir = './data/val/d=f/input_data/celeb'
+celeb_val_label_dir = './data/val/d=f/groundtruth_data/celeb'
 celeb_val_loader = DataLoader(val_data(celeb_val_root_dir, celeb_val_label_dir), batch_size=25)
 # celeb data
-img_val_root_dir = 'D:/val/d=f/input_data/imagenet'
-img_val_label_dir = 'D:/val/d=f/groundtruth_data/imagenet'
+img_val_root_dir = './data/val/d=f/input_data/imagenet'
+img_val_label_dir = './data/val/d=f/groundtruth_data/imagenet'
 img_val_loader = DataLoader(val_data(img_val_root_dir, img_val_label_dir), batch_size=25)
 
 
